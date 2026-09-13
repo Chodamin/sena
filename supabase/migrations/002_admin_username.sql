@@ -1,5 +1,5 @@
 -- 이미 001_initial.sql 을 적용한 프로젝트용 패치:
--- username 이 gksthfvkdl 인 계정도 관리자로 인식 (is_admin 컬럼 없이도 가능).
+-- username 이 khan1208 인 계정도 관리자로 인식 (is_admin 컬럼 없이도 가능).
 -- Supabase SQL Editor에서 한 번 실행하세요.
 
 CREATE OR REPLACE FUNCTION public.is_admin()
@@ -10,7 +10,7 @@ SECURITY DEFINER
 SET search_path = public
 AS $$
   SELECT COALESCE((
-    SELECT (p.is_admin OR LOWER(TRIM(p.username)) = 'gksthfvkdl')
+    SELECT (p.is_admin OR LOWER(TRIM(p.username)) = 'khan1208')
     FROM public.profiles p
     WHERE p.id = auth.uid()
   ), FALSE);

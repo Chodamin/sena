@@ -6,7 +6,7 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
   return {
     plugins: [react()],
-    /** 예: https://gksthfvkdl1-cpu.github.io/sol/ → VITE_BASE_PATH=/sol/ */
+    /** 예: https://chodamin.github.io/sena/ → VITE_BASE_PATH=/sena/ */
     base: env.VITE_BASE_PATH?.trim() || '/',
   }
 })

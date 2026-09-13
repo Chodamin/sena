@@ -155,7 +155,7 @@ export function AdminPortraitPanel({
       </h3>
       {!cloudOk ? (
         <p className="form-error" role="alert" style={{ marginBottom: '0.75rem' }}>
-          {cloudinaryConfigHint()} 로컬은 <code style={{ fontSize: '0.85em' }}>seven/.env</code> 에
+          {cloudinaryConfigHint()} 로컬은 <code style={{ fontSize: '0.85em' }}>.env</code> 에
           위 두 변수를 넣고 <code style={{ fontSize: '0.85em' }}>npm run dev</code> 를 다시 실행하세요.
         </p>
       ) : (

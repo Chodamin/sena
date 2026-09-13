@@ -1,0 +1,337 @@
+/* 개편 버전(v2) 셸 — classic에는 영향 없음 */
+
+.guide-shell--v2 {
+  --g2-pink: #ec4899;
+  --g2-pink-deep: #db2777;
+  --g2-pink-soft: #fce7f3;
+  --g2-pink-wash: #fff1f7;
+  --g2-ink: #0f172a;
+  --g2-muted: #64748b;
+  --g2-line: #e8edf4;
+  --g2-radius: 16px;
+  background: #f7f8fb;
+}
+
+.guide-shell--v2 .guide-inner {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 1.25rem 1.25rem 3rem;
+}
+
+.g2-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1rem;
+  padding: 0.75rem 1.25rem;
+  background: #fff;
+  border-bottom: 1px solid var(--g2-line);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.g2-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0.15rem 0.25rem;
+  border-radius: 10px;
+  color: var(--g2-ink);
+  font-weight: 800;
+  font-size: 1.05rem;
+  letter-spacing: -0.02em;
+}
+
+.g2-brand:hover {
+  background: var(--g2-pink-wash);
+}
+
+.g2-brand-logo {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+.g2-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.15rem;
+  flex: 1;
+  justify-content: center;
+  min-width: 0;
+}
+
+.g2-nav button {
+  border: none;
+  background: transparent;
+  padding: 0.45rem 0.7rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--g2-muted);
+  cursor: pointer;
+  border-radius: 999px;
+  transition: color 0.15s, background 0.15s;
+}
+
+.g2-nav button:hover {
+  color: var(--g2-pink-deep);
+  background: var(--g2-pink-wash);
+}
+
+.g2-nav button.g2-nav--active {
+  color: var(--g2-pink-deep);
+  background: var(--g2-pink-soft);
+}
+
+.g2-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
+  margin-left: auto;
+}
+
+.g2-user {
+  font-size: 0.8rem;
+  color: var(--g2-muted);
+  margin-right: 0.15rem;
+}
+
+.g2-user strong {
+  color: var(--g2-ink);
+}
+
+.g2-btn {
+  border-radius: 999px;
+  padding: 0.45rem 0.95rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.g2-btn--ghost {
+  background: #fff;
+  border-color: #dbe2ea;
+  color: var(--g2-ink);
+}
+
+.g2-btn--ghost:hover {
+  border-color: var(--g2-pink);
+  color: var(--g2-pink-deep);
+}
+
+.g2-btn--primary {
+  background: var(--g2-pink);
+  color: #fff;
+}
+
+.g2-btn--primary:hover {
+  background: var(--g2-pink-deep);
+}
+
+.g2-home {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.g2-hero {
+  display: grid;
+  grid-template-columns: 1.4fr 0.8fr;
+  gap: 1rem;
+  align-items: center;
+  background: linear-gradient(135deg, #fff5f9 0%, #ffe4ef 55%, #ffd6e8 100%);
+  border-radius: 22px;
+  padding: 2rem 2.1rem;
+  overflow: hidden;
+  position: relative;
+}
+
+.g2-hero-title {
+  margin: 0;
+  font-size: clamp(1.45rem, 3.2vw, 2rem);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  color: var(--g2-ink);
+  line-height: 1.25;
+}
+
+.g2-hero-desc {
+  margin: 0.65rem 0 0;
+  color: #6b7280;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  max-width: 36rem;
+}
+
+.g2-hero-search {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+  max-width: 28rem;
+}
+
+.g2-hero-input {
+  flex: 1;
+  min-width: 0;
+  border: 1px solid #f3c4d8;
+  background: #fff;
+  border-radius: 12px;
+  padding: 0.75rem 0.95rem;
+  font-size: 0.9rem;
+  color: var(--g2-ink);
+}
+
+.g2-hero-input:focus {
+  outline: 2px solid #f9a8d4;
+  outline-offset: 1px;
+}
+
+.g2-hero-btn {
+  border: none;
+  border-radius: 12px;
+  padding: 0.75rem 1.15rem;
+  background: var(--g2-pink);
+  color: #fff;
+  font-weight: 800;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.g2-hero-btn:hover {
+  background: var(--g2-pink-deep);
+}
+
+.g2-hero-art {
+  position: relative;
+  min-height: 140px;
+}
+
+.g2-hero-blob {
+  position: absolute;
+  border-radius: 28px;
+  background: #fff;
+  box-shadow: 0 10px 28px rgb(236 72 153 / 0.18);
+}
+
+.g2-hero-blob--1 {
+  width: 88px;
+  height: 88px;
+  right: 18%;
+  top: 8%;
+  background: linear-gradient(160deg, #fff, #fbcfe8);
+}
+
+.g2-hero-blob--2 {
+  width: 72px;
+  height: 72px;
+  right: 42%;
+  bottom: 12%;
+  background: linear-gradient(160deg, #fff, #f9a8d4);
+}
+
+.g2-hero-blob--3 {
+  width: 64px;
+  height: 64px;
+  right: 8%;
+  bottom: 18%;
+  background: linear-gradient(160deg, #fff, #fda4af);
+}
+
+.g2-cat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+.g2-cat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.35rem;
+  text-align: left;
+  background: #fff;
+  border: 1px solid var(--g2-line);
+  border-radius: var(--g2-radius);
+  padding: 1.15rem 1.2rem;
+  cursor: pointer;
+  transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+}
+
+.g2-cat-card:hover {
+  border-color: #f9a8d4;
+  box-shadow: 0 8px 24px rgb(15 23 42 / 0.06);
+  transform: translateY(-1px);
+}
+
+.g2-cat-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--g2-ink);
+}
+
+.g2-cat-desc {
+  font-size: 0.85rem;
+  color: var(--g2-muted);
+  line-height: 1.45;
+}
+
+.g2-cat-meta {
+  margin-top: 0.55rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--g2-pink);
+}
+
+.guide-shell--v2 .guide-card {
+  border-radius: 16px;
+  border-color: var(--g2-line);
+  box-shadow: none;
+}
+
+.guide-shell--v2 .guide-btn-primary-lg,
+.guide-shell--v2 .guide-search-btn {
+  background: var(--g2-pink);
+}
+
+.guide-shell--v2 .guide-btn-primary-lg:hover,
+.guide-shell--v2 .guide-search-btn:hover {
+  background: var(--g2-pink-deep);
+}
+
+@media (max-width: 860px) {
+  .g2-hero {
+    grid-template-columns: 1fr;
+    padding: 1.5rem;
+  }
+
+  .g2-hero-art {
+    display: none;
+  }
+
+  .g2-cat-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .g2-nav {
+    order: 3;
+    width: 100%;
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 520px) {
+  .g2-cat-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .g2-hero-search {
+    flex-direction: column;
+  }
+}

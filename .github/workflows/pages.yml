@@ -1,6 +1,7 @@
-# GitHub Pages: https://gksthfvkdl1-cpu.github.io/sol/
-# Supabase: VITE_SUPABASE_URL(공개) + VITE_SUPABASE_ANON_KEY(Actions Secret)
-# Cloudinary(선택): Repository variables VITE_CLOUDINARY_CLOUD_NAME + Secret VITE_CLOUDINARY_UPLOAD_PRESET
+# GitHub Pages: https://chodamin.github.io/sena/
+# Repo: https://github.com/Chodamin/sena
+# Supabase: vars.VITE_SUPABASE_URL + secrets.VITE_SUPABASE_ANON_KEY
+# Cloudinary: vars.VITE_CLOUDINARY_CLOUD_NAME + vars/secrets.VITE_CLOUDINARY_UPLOAD_PRESET
 
 name: Deploy to GitHub Pages
 
@@ -30,13 +31,12 @@ jobs:
           cache-dependency-path: package-lock.json
       - name: Install and build
         env:
-          VITE_SUPABASE_URL: https://bvnlwpjjzptarpbwkeqn.supabase.co
+          VITE_SUPABASE_URL: ${{ vars.VITE_SUPABASE_URL }}
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
-          VITE_BASE_PATH: ${{ vars.VITE_BASE_PATH || '/sol/' }}
+          VITE_BASE_PATH: ${{ vars.VITE_BASE_PATH || '/sena/' }}
           VITE_INITIAL_NAV: ${{ vars.VITE_INITIAL_NAV || 'admin' }}
-          # 환경 변수 누락 시에도 배포에서 기본값으로 동작하도록 fallback
-          VITE_CLOUDINARY_CLOUD_NAME: ${{ vars.VITE_CLOUDINARY_CLOUD_NAME || 'djon3nvjm' }}
-          VITE_CLOUDINARY_UPLOAD_PRESET: ${{ vars.VITE_CLOUDINARY_UPLOAD_PRESET || secrets.VITE_CLOUDINARY_UPLOAD_PRESET || 'seven_Sol' }}
+          VITE_CLOUDINARY_CLOUD_NAME: ${{ vars.VITE_CLOUDINARY_CLOUD_NAME }}
+          VITE_CLOUDINARY_UPLOAD_PRESET: ${{ vars.VITE_CLOUDINARY_UPLOAD_PRESET || secrets.VITE_CLOUDINARY_UPLOAD_PRESET }}
         run: |
           npm ci
           npm run build

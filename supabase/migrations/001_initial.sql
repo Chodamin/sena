@@ -24,9 +24,9 @@ ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 -- ---------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS public.auth_public_config (
   id INT PRIMARY KEY DEFAULT 1 CHECK (id = 1),
-  admin_username_contains TEXT NOT NULL DEFAULT 'gksthfvkdl',
-  admin_email_exact TEXT NOT NULL DEFAULT 'gksthfvkdl@naver.com',
-  signup_forbid_username_contains TEXT NOT NULL DEFAULT 'gksthfvkdl',
+  admin_username_contains TEXT NOT NULL DEFAULT 'khan1208',
+  admin_email_exact TEXT NOT NULL DEFAULT '',
+  signup_forbid_username_contains TEXT NOT NULL DEFAULT 'khan1208',
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 

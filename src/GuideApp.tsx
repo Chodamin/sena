@@ -13,6 +13,9 @@ import type { MatchupRow } from './types/matchup.ts'
 import { MyVotesByDatePanel } from './MyVotesByDatePanel.tsx'
 import './App.css'
 import './guide.css'
+import './guide-v2.css'
+import { GuideV2Home } from './GuideV2Home.tsx'
+import { loadUiMode, saveUiMode, type UiMode } from './lib/uiModeStorage.ts'
 import { AdminPortraitPanel } from './AdminPortraitPanel.tsx'
 import { AdminPrivilegePanel } from './AdminPrivilegePanel.tsx'
 import { AdminWeeklySummary } from './AdminWeeklySummary.tsx'
@@ -331,6 +334,9 @@ function buildWeekOptionsOfYear(year: number): WeekOption[] {
 
 export function GuideApp({ session, onLogout }: Props) {
   const isAdmin = session.isAdmin
+  const [uiMode, setUiMode] = useState<UiMode>(() => loadUiMode())
+  const [v2Home, setV2Home] = useState(() => loadUiMode() === 'v2')
+  const [v2SearchDraft, setV2SearchDraft] = useState('')
   const [nav, setNav] = useState<NavId>('search')
   const [heroOptions, setHeroOptions] = useState<string[]>([])
   const [portraitUrlByKey, setPortraitUrlByKey] = useState<Record<string, string>>(
@@ -1424,18 +1430,80 @@ export function GuideApp({ session, onLogout }: Props) {
     }
   }
 
+  const goNav = (id: NavId) => {
+    if (id !== 'search') {
+      setMyMatchupsOpen(false)
+      setSearchRegisterOpen(false)
+    }
+    setV2Home(false)
+    setNav(id)
+  }
+
+  const toggleUiMode = () => {
+    setUiMode((prev) => {
+      const next: UiMode = prev === 'classic' ? 'v2' : 'classic'
+      saveUiMode(next)
+      setV2Home(next === 'v2')
+      return next
+    })
+  }
+
+  const v2Cards = [
+    {
+      id: 'search',
+      title: '공략 검색',
+      desc: '수호 진형으로 공격 조합과 투표를 찾아보세요.',
+      meta: '바로가기',
+    },
+    {
+      id: 'stats',
+      title: '공격 통계',
+      desc: '주간 공격 영웅 TOP과 사용 현황을 확인합니다.',
+      meta: '통계',
+    },
+    {
+      id: 'siege',
+      title: '공성전',
+      desc: '공성전 작전 보드와 공략을 한곳에서 관리합니다.',
+      meta: '작전',
+    },
+    {
+      id: 'register',
+      title: '공략 등록',
+      desc: '직접 확인한 매치업을 등록해 길드원과 공유하세요.',
+      meta: '등록',
+    },
+    {
+      id: 'rank',
+      title: '기여 랭킹',
+      desc: '등록·투표 기여도를 기준으로 순위를 봅니다.',
+      meta: '랭킹',
+    },
+    {
+      id: 'admin',
+      title: '등록/수정',
+      desc: '관리 메뉴, 초상화·권한·주간 요약을 다룹니다.',
+      meta: '관리',
+    },
+  ] as const
+
   const navBtn = (id: NavId, label: string) => (
     <button
       key={id}
       type="button"
       className={nav === id ? 'guide-nav--active' : ''}
-      onClick={() => {
-        if (id !== 'search') {
-          setMyMatchupsOpen(false)
-          setSearchRegisterOpen(false)
-        }
-        setNav(id)
-      }}
+      onClick={() => goNav(id)}
+    >
+      {label}
+    </button>
+  )
+
+  const v2NavBtn = (id: NavId, label: string) => (
+    <button
+      key={id}
+      type="button"
+      className={!v2Home && nav === id ? 'g2-nav--active' : ''}
+      onClick={() => goNav(id)}
     >
       {label}
     </button>
@@ -1474,31 +1542,89 @@ export function GuideApp({ session, onLogout }: Props) {
   }
 
   return (
-    <div className="guide-shell">
-      <nav className="guide-nav" aria-label="메인 메뉴">
-        {navBtn('search', '공략 검색')}
-        {navBtn('stats', '공격 통계')}
-        {navBtn('siege', '공성전')}
-        {navBtn('register', '공략 등록')}
-        {navBtn('rank', '기여 랭킹')}
-        {navBtn('admin', '등록/수정')}
-      </nav>
+    <div
+      className={
+        uiMode === 'v2' ? 'guide-shell guide-shell--v2' : 'guide-shell'
+      }
+    >
+      {uiMode === 'classic' ? (
+        <nav className="guide-nav" aria-label="메인 메뉴">
+          {navBtn('search', '공략 검색')}
+          {navBtn('stats', '공격 통계')}
+          {navBtn('siege', '공성전')}
+          {navBtn('register', '공략 등록')}
+          {navBtn('rank', '기여 랭킹')}
+          {navBtn('admin', '등록/수정')}
+        </nav>
+      ) : (
+        <header className="g2-top">
+          <button
+            type="button"
+            className="g2-brand"
+            onClick={() => setV2Home(true)}
+            aria-label="개편 홈으로"
+          >
+            <BrandLogo className="g2-brand-logo" />
+            <span>길드전 정답지</span>
+          </button>
+          <nav className="g2-nav" aria-label="메인 메뉴">
+            {v2NavBtn('search', '공략 검색')}
+            {v2NavBtn('stats', '공격 통계')}
+            {v2NavBtn('siege', '공성전')}
+            {v2NavBtn('register', '공략 등록')}
+            {v2NavBtn('rank', '기여 랭킹')}
+            {v2NavBtn('admin', '등록/수정')}
+          </nav>
+          <div className="g2-actions">
+            <span className="g2-user">
+              <strong>{profileName}</strong> 님
+            </span>
+            <button type="button" className="g2-btn g2-btn--ghost" onClick={toggleUiMode}>
+              기존 화면
+            </button>
+            <button type="button" className="g2-btn g2-btn--primary" onClick={onLogout}>
+              로그아웃
+            </button>
+          </div>
+        </header>
+      )}
 
       <div className="guide-inner">
-        <div className="guide-top-actions">
-          <button type="button" className="button-secondary" onClick={onLogout}>
-            로그아웃
-          </button>
-        </div>
+        {uiMode === 'classic' ? (
+          <>
+            <div className="guide-top-actions">
+              <button type="button" className="button-secondary" onClick={toggleUiMode}>
+                개편 버전
+              </button>
+              <button type="button" className="button-secondary" onClick={onLogout}>
+                로그아웃
+              </button>
+            </div>
 
-        <header className="guide-brand">
-          <BrandLogo />
-          <h1 className="guide-brand-title">길드전 정답지</h1>
-          <p className="guide-user">
-            👤 <strong>{profileName}</strong> 님
-          </p>
-        </header>
+            <header className="guide-brand">
+              <BrandLogo />
+              <h1 className="guide-brand-title">길드전 정답지</h1>
+              <p className="guide-user">
+                👤 <strong>{profileName}</strong> 님
+              </p>
+            </header>
+          </>
+        ) : null}
 
+        {uiMode === 'v2' && v2Home ? (
+          <GuideV2Home
+            cards={[...v2Cards]}
+            onSelect={(id) => goNav(id as NavId)}
+            searchDraft={v2SearchDraft}
+            onSearchDraftChange={setV2SearchDraft}
+            onSearchSubmit={() => {
+              const q = v2SearchDraft.trim()
+              if (q) setD1(q)
+              goNav('search')
+            }}
+          />
+        ) : (
+          <>
         {nav === 'siege' && (
           <section className="guide-card siege-card" aria-labelledby="siege-h">
             <div className="siege-top">
@@ -2359,6 +2485,8 @@ export function GuideApp({ session, onLogout }: Props) {
               onSubmit={onRegister}
             />
           </section>
+        )}
+          </>
         )}
       </div>
     </div>
