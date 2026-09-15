@@ -40,6 +40,7 @@ type Props = {
   onEditFormation2Change: (value: string) => void
   onEditFormation3Change: (value: string) => void
   onEditNotesChange: (value: string) => void
+  onToggleRecommend?: (id: number, currentStatus: boolean) => void
 }
 
 function formatDateYmdSeoul(iso: string): string {
@@ -115,13 +116,40 @@ export function MatchupGroupCard({
   onEditFormation2Change,
   onEditFormation3Change,
   onEditNotesChange,
+  onToggleRecommend,
 }: Props) {
   const h = g.header
   const sumW = g.strategies.reduce((s, x) => s + x.win, 0)
   const sumL = g.strategies.reduce((s, x) => s + x.lose, 0)
 
+  // 해당 그룹(또는 헤더)에 추천 설정이 되어 있는지 확인
+  const isRecommendedGroup = h.is_recommended || g.strategies.some((x) => x.is_recommended)
+
   return (
-    <article className="guide-match-card">
+    <article className={isRecommendedGroup ? 'guide-match-card guide-match-card--recommended' : 'guide-match-card'}>
+      {/* 🌟 1. 맨 위 상단 단독 추천 뱃지 라인 */}
+      {isRecommendedGroup && (
+        <div style={{ marginBottom: '0.6rem' }}>
+          <span
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '4px',
+              backgroundColor: '#f59e0b',
+              color: '#ffffff',
+              fontWeight: 'bold',
+              fontSize: '0.8rem',
+              padding: '3px 9px',
+              borderRadius: '6px',
+              boxShadow: '0 2px 6px rgba(245, 158, 11, 0.3)',
+            }}
+          >
+            ⭐ 추천 공략
+          </span>
+        </div>
+      )}
+
+      {/* 2. 기존 초상화 및 덱 정보들 (자연스럽게 한 칸 아래로 배치됨) */}
       <div className="guide-match-head">
         <div className="guide-match-lines">
           <div className="guide-line guide-line--portraits">
@@ -283,6 +311,22 @@ export function MatchupGroupCard({
               )}
             </div>
             <div className="guide-match-actions">
+              {/* 관리자 계정일 때만 보이는 추천 토글 버튼 */}
+              {isAdmin && onToggleRecommend && (
+                <button
+                  type="button"
+                  className="guide-btn-ghost"
+                  style={{
+                    color: m.is_recommended ? '#f59e0b' : '#9ca3af',
+                    fontWeight: m.is_recommended ? 'bold' : 'normal',
+                  }}
+                  onClick={() => onToggleRecommend(m.id, Boolean(m.is_recommended))}
+                  title={m.is_recommended ? '추천 공략 해제' : '추천 공략으로 지정'}
+                >
+                  {m.is_recommended ? '⭐ 추천 해제' : '☆ 추천 지정'}
+                </button>
+              )}
+
               {editingId === m.id ? (
                 <>
                   <button

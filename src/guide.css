@@ -2287,3 +2287,9 @@
   border-radius: 999px;
   padding: 0.15rem 0.5rem;
 }
+
+/* 추천 공략 카드 하이라이트 테두리 */
+.guide-match-card--recommended {
+  border: 2px solid #f59e0b !important;
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.15);
+}

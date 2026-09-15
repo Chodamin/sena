@@ -32,8 +32,8 @@ export function HeroPortraitStrip({
         gridTemplateColumns: `repeat(${colCount}, minmax(0, 1fr))`,
       }}
     >
-      {slots.map(({ label, key, url }) => (
-        <div key={key || label || 'empty'} className="guide-portrait-slot">
+      {slots.map(({ label, key, url }, idx) => (
+        <div key={`${key || label || 'empty'}-${idx}`} className="guide-portrait-slot">
           {url ? (
             <img
               className="guide-portrait-img"

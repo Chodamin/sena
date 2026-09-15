@@ -200,6 +200,7 @@ function mapRpcToMatchup(r: Record<string, unknown>): MatchupRow {
       r.created_at != null ? String(r.created_at) : undefined,
     updated_at:
       r.updated_at != null ? String(r.updated_at) : undefined,
+    is_recommended: Boolean(r.is_recommended ?? false), // 👈 추가!
   }
 }
 
@@ -215,6 +216,12 @@ function groupMatchups(rows: MatchupRow[]): MatchupGroup[] {
   const out: MatchupGroup[] = []
   for (const [groupId, strategies] of map) {
     strategies.sort((a, b) => {
+      // 1순위: 추천 덱(is_recommended) 우선
+      const recA = a.is_recommended ? 1 : 0
+      const recB = b.is_recommended ? 1 : 0
+      if (recB !== recA) return recB - recA
+
+      // 2순위: 승수 순
       if (b.win !== a.win) return b.win - a.win
       return a.id - b.id
     })
@@ -222,12 +229,20 @@ function groupMatchups(rows: MatchupRow[]): MatchupGroup[] {
     out.push({ groupId, header, strategies })
   }
   out.sort((a, b) => {
+    // 1순위: 그룹 내에 추천 덱(is_recommended)이 있는지 여부
+    const hasRecA = a.strategies.some((x) => x.is_recommended) ? 1 : 0
+    const hasRecB = b.strategies.some((x) => x.is_recommended) ? 1 : 0
+    if (hasRecB !== hasRecA) return hasRecB - hasRecA
+
+    // 2순위: 총 승수 순
     const wa = a.strategies.reduce((s, x) => s + x.win, 0)
     const wb = b.strategies.reduce((s, x) => s + x.win, 0)
     if (wb !== wa) return wb - wa
+
     const ta = a.strategies.reduce((s, x) => s + x.win + x.lose, 0)
     const tb = b.strategies.reduce((s, x) => s + x.win + x.lose, 0)
     if (tb !== ta) return tb - ta
+
     return a.header.id - b.header.id
   })
   return out
@@ -1443,6 +1458,44 @@ export function GuideApp({ session, onLogout }: Props) {
     </button>
   )
 
+  const toggleRecommend = async (id: number, currentStatus: boolean) => {
+  try {
+    const tok = getSessionToken()
+    if (!tok) {
+      alert('세션이 없습니다.')
+      return
+    }
+
+    const nextStatus = !currentStatus
+    const { data, error } = await supabase.rpc('admin_toggle_recommend', {
+      p_session_token: tok,
+      p_matchup_id: id,
+      p_is_recommended: nextStatus,
+    })
+
+    if (error) {
+      alert(`처리 실패: ${error.message}`)
+      return
+    }
+
+    const res = data as { ok: boolean; message?: string }
+    if (!res.ok) {
+      alert(res.message || '처리 실패')
+      return
+    }
+
+    // 로컬 상태 즉시 업데이트 (검색 결과 & 내 공략 목록 반영)
+    const patchRec = (r: MatchupRow): MatchupRow =>
+      r.id === id ? { ...r, is_recommended: nextStatus } : r
+
+    setResults((prev) => prev.map(patchRec))
+    setMyMatchups((prev) => prev.map(patchRec))
+    setSearchMasonryTick((n) => n + 1)
+  } catch (err) {
+    alert('오류가 발생했습니다.')
+  }
+}
+
   const matchupCardProps = {
     portraitUrlByKey,
     editingId,
@@ -1473,6 +1526,7 @@ export function GuideApp({ session, onLogout }: Props) {
     onEditFormation2Change: setEditFormation2,
     onEditFormation3Change: setEditFormation3,
     onEditNotesChange: setEditNotes,
+    onToggleRecommend: toggleRecommend,
   }
 
   return (
