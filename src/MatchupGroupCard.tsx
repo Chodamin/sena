@@ -176,21 +176,24 @@ export function MatchupGroupCard({
               />
             </div>
           ) : null}
-          {h.equipment.trim() ? (
+{/* 장비 라인: h.equipment?.trim() 및 h.equipment ?? '' 적용 */}
+          {h.equipment?.trim() ? (
             <div className="guide-line guide-line--portraits">
               <span className="guide-badge-equipment">장비</span>
               <HeroPortraitStrip
-                names={splitTeamLabel(h.equipment)}
+                names={splitTeamLabel(h.equipment ?? '')}
                 portraitUrlByKey={portraitUrlByKey}
                 fixedColumns={3}
               />
             </div>
           ) : null}
-          {h.formation.trim() ? (
+
+          {/* 진형 라인: h.formation?.trim() 및 h.formation ?? '' 적용 */}
+          {h.formation?.trim() ? (
             <div className="guide-line guide-line--portraits">
               <span className="guide-badge-formation">진형</span>
               <HeroPortraitStrip
-                names={splitTeamLabel(h.formation)}
+                names={splitTeamLabel(h.formation ?? '')}
                 portraitUrlByKey={portraitUrlByKey}
                 fixedColumns={3}
               />
