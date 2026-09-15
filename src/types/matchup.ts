@@ -8,8 +8,8 @@ export type MatchupRow = {
   attack2: string
   attack3: string
   pet: string
-  equipment: string
-  formation: string
+  equipment?: string
+  formation?: string
   skill_order: string
   notes: string
   win: number
@@ -17,7 +17,7 @@ export type MatchupRow = {
   author_id: string
   author_name?: string
   author_username?: string
-  /** ISO 시각 (DB `search_matchups` 등) */
   created_at?: string
   updated_at?: string
+  is_recommended?: boolean
 }
