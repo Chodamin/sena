@@ -1,8 +1,4 @@
--- 1. matchups 테이블에 is_recommended 컬럼 추가
-ALTER TABLE public.matchups
-  ADD COLUMN IF NOT EXISTS is_recommended BOOLEAN NOT NULL DEFAULT FALSE;
-
--- 2. 기존 search_matchups 함수 제거 후 재정의
+-- 028에서 재정의된 search_matchups에 장비·진형과 최신 메타데이터를 복원
 DROP FUNCTION IF EXISTS public.search_matchups(TEXT, TEXT, TEXT, TEXT[]);
 
 CREATE OR REPLACE FUNCTION public.search_matchups(
@@ -95,5 +91,4 @@ BEGIN
 END;
 $$;
 
--- anon 역할 권한 부여
 GRANT EXECUTE ON FUNCTION public.search_matchups(TEXT, TEXT, TEXT, TEXT[]) TO anon;
